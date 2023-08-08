@@ -31,7 +31,6 @@ python3 encrypt.py -p folder
 ### Eample
 ```python
 python3 encrypt.py -p test/
-
 ```
 <details>
     <summary> Result
