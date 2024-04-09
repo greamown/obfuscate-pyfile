@@ -1,4 +1,4 @@
-import os, subprocess, shutil
+import os, subprocess, shutil, glob
 
 def cmd(command, split_action=True):
     if split_action:
@@ -42,14 +42,25 @@ def collect_pyfiles(dist:str):
                     file_dict["files"].append(fullpath)  
     return file_dict
 
-def move_obf_file(dist:str, file_dict:dict, gen_path:str):
-    for key, value in file_dict["filename"].items():
-        file = os.path.join(value, key)
-        dist_file = os.path.join(gen_path, key)
-        os.remove(file)
-        shutil.move(dist_file, file)
+def move_obf_file(dist: str, file_dict: dict, gen_path: str) -> None:
+    # Remove all *.py file and move obfuscate file
+    dist_list = sorted(glob.glob("/workspace/*dist*"))
+    for path in file_dict["files"]:
+        dist_index = 0
+        filename = os.path.split(path)[-1]
+        dist_file = os.path.join(gen_path, filename)
+        while dist_index < len(dist_list):
+            if not os.path.exists(dist_file):
+                dist_index += 1
+                dist_file = os.path.join(f"{gen_path}-{dist_index}", filename)
+            else:
+                break
+        os.remove(path)
+        shutil.move(dist_file, path)
     # Move pyarmor_runtime_000000
     pyarmor_old_path = os.path.join(gen_path, "pyarmor_runtime_000000")
     pyarmor_new_path = os.path.join(dist, "pyarmor_runtime_000000")
     shutil.move(pyarmor_old_path, pyarmor_new_path)
-    shutil.rmtree(gen_path)
+    # Remove other generation file
+    for path in dist_list:
+        shutil.rmtree(path)
