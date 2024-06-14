@@ -45,6 +45,7 @@ def collect_pyfiles(dist:str):
 def move_obf_file(dist: str, file_dict: dict, gen_path: str) -> None:
     # Remove all *.py file and move obfuscate file
     dist_list = sorted(glob.glob("/workspace/*dist*"))
+    print(dist_list)
     for path in file_dict["files"]:
         dist_index = 0
         filename = os.path.split(path)[-1]
@@ -55,8 +56,9 @@ def move_obf_file(dist: str, file_dict: dict, gen_path: str) -> None:
                 dist_file = os.path.join(f"{gen_path}-{dist_index}", filename)
             else:
                 break
-        os.remove(path)
-        shutil.move(dist_file, path)
+        if os.path.exists(dist_file):
+            os.remove(path)
+            shutil.move(dist_file, path)
     # Move pyarmor_runtime_000000
     pyarmor_old_path = os.path.join(gen_path, "pyarmor_runtime_000000")
     pyarmor_new_path = os.path.join(dist, "pyarmor_runtime_000000")
