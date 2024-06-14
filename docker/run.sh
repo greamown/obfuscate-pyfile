@@ -18,7 +18,8 @@ COMMAND="bash"
 WORKSPACE="/workspace"
 CONTAINER_NAME="pyarmor-encrypt"
 DOCKER_IMAGE="pyarmor-encrypt"
-TAG_VER="latest"
+TAG_VER="3.10.11"
+# TAG_VER="3.8.10"
 
 # ---------------------------------------------------------
 # SERVER or DESKTOP MODE
